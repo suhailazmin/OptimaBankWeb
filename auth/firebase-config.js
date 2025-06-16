@@ -1,4 +1,3 @@
-// Replace with your Firebase project config
 const firebaseConfig = {
   apiKey: "AIzaSyB1TS8Gb2Db2MzzVxlyMWHBrgUJHKitZBU",
   authDomain: "optimabank-acca4.firebaseapp.com",
