@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard | OptimaBankWeb</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="auth/firebase-config.js"></script>
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Welcome, <span id="user-name"></span>!</h2>
+    <p>You are logged in to OptimaBankWeb.</p>
+    <button id="logout-btn">Logout</button>
+  </div>
+  <script>
+    // Check auth state and redirect to login if not logged in
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById('user-name').textContent = user.displayName || user.email;
+      } else {
+        window.location.href = "auth/login.html";
+      }
+    });
+
+    document.getElementById('logout-btn').onclick = function() {
+      firebase.auth().signOut().then(function() {
+        window.location.href = "auth/login.html";
+      });
+    };
+  </script>
+</body>
+</html>
