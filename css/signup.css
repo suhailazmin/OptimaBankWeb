@@ -1,0 +1,104 @@
+/* Reset and base styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+/* Full-page background */
+
+body {
+    height: 100vh;
+    width: 100%;
+    background: #5c008b url("../assets/signup.png") no-repeat center center/cover;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Optional: Purple overlay if background image used */
+
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #5c008b;
+    opacity: 0.85;
+    z-index: 0;
+}
+
+
+/* Centered white form container */
+
+.container {
+    position: relative;
+    z-index: 1;
+    background-color: white;
+    width: 90%;
+    max-width: 700px;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Title */
+
+.container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #2e0854;
+}
+
+
+/* Label styling */
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+
+/* Input field styling */
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}
+
+
+/* Register button */
+
+.register-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #f7941d;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+    background-color: #e67e00;
+}

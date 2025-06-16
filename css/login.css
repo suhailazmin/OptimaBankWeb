@@ -1,0 +1,157 @@
+/* Global Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+/* Make container a flex row */
+
+.container {
+    display: flex;
+    height: 100vh;
+    /* full screen height */
+    width: 100vw;
+    /* full screen width */
+}
+
+
+/* Make left section take more space */
+
+.left-section {
+    flex: 2;
+    /* Take 2 parts */
+    background: url("../assets/loginpage.png") no-repeat center center/cover;
+}
+
+
+/* Right section takes less space */
+
+.right-section {
+    flex: 1;
+    /* Take 1 part */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5c008b;
+    /* Optional */
+}
+
+
+/* Login box */
+
+h1,
+h2 {
+    text-align: center;
+}
+
+.login-box {
+    background-color: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.brand {
+    color: #f7941d;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.login-title {
+    font-size: 22px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+
+/* Input fields */
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+
+/* Remember + Forgot */
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #5c008b;
+}
+
+
+/* Divider */
+
+.divider {
+    margin: 20px 0;
+    font-weight: bold;
+    color: #888;
+    text-align: center;
+}
+
+
+/* Google Button */
+
+.google-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.google-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Login Button */
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #f7941d;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* Sign up link */
+
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: #f7941d;
+    text-decoration: none;
+}

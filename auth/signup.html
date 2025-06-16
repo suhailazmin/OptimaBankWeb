@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Sign Up | OptimaBankWeb</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="firebase-config.js"></script>
+    <title>Sign Up | OptimaBankWeb</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="firebase-config.js"></script>
 </head>
+
 <body>
-  <div class="auth-container">
-    <h2>Sign Up</h2>
-    <form id="signupForm">
-      <input type="text" id="signup-name" placeholder="Name" required>
-      <input type="email" id="signup-email" placeholder="Email" required>
-      <input type="password" id="signup-password" placeholder="Password" required>
-      <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
-      <button type="submit">Sign Up</button>
-    </form>
-    <button id="google-signup-btn">Sign up with Google</button>
-    <p>Already have an account? <a href="login.html">Login</a></p>
-    <div id="signup-error"></div>
-  </div>
-  <script src="signup.js"></script>
+    <div class="auth-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <input type="text" id="signup-name" placeholder="Name" required />
+            <input type="email" id="signup-email" placeholder="Email" required />
+            <input type="password" id="signup-password" placeholder="Password" required />
+            <input type="password" id="signup-confirm" placeholder="Confirm Password" required />
+            <button type="submit">Sign Up</button>
+        </form>
+        <button id="google-signup-btn">Sign up with Google</button>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+        <div id="signup-error"></div>
+    </div>
+    <script src="signup.js"></script>
 </body>
+
 </html>
