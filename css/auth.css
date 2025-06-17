@@ -1,0 +1,142 @@
+/* Auth Pages Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f6f9fc;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.auth-header {
+    background-color: #5c008b;
+    padding: 20px 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header .logo {
+    color: #FF8300;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 68px);
+    padding: 40px 20px;
+}
+
+.auth-box {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.auth-box h2 {
+    color: #5c008b;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: #5c008b;
+    outline: none;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #FF8300;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.auth-button:hover {
+    background-color: #e67600;
+}
+
+.auth-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.auth-footer a {
+    color: #5c008b;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.error {
+    color: #d8000c;
+    background-color: white;
+}
+
+.success {
+    color: #4BB543;
+    background-color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 30px 20px;
+    }
+    
+    .auth-box h2 {
+        font-size: 24px;
+    }
+    
+    .auth-subtitle {
+        font-size: 14px;
+    }
+}
