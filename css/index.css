@@ -1,0 +1,183 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header styles */
+.main-header {
+    background-color: #5c008b;
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FF8300;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav li {
+    margin-left: 30px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.main-nav a:hover {
+    opacity: 0.8;
+}
+
+.search-signin {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 8px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    margin-right: 20px;
+    min-width: 200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.search-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.signin-btn {
+    background-color: white;
+    color:  #FF8300;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.signin-btn:hover {
+    background-color: white;
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(rgba(92, 0, 139, 0.8), rgba(92, 0, 139, 0.8)), 
+                url('../assets/loginpage.png') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-top: 80px; /* To account for fixed header */
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-section h1 {
+    font-size: 72px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+.hero-section .optima {
+    color: #FF8300;
+    font-weight: 700;
+}
+
+.hero-section .bank {
+    color: white;
+    font-weight: 300;
+}
+
+.tagline {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.sub-tagline {
+    font-size: 20px;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #FF8300;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #e67600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-header .container {
+        flex-direction: column;
+    }
+    
+    .main-nav {
+        margin: 15px 0;
+    }
+    
+    .search-signin {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-section h1 {
+        font-size: 48px;
+    }
+    
+    .tagline {
+        font-size: 24px;
+    }
+    
+    .sub-tagline {
+        font-size: 18px;
+    }
+}
