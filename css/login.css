@@ -155,3 +155,51 @@ input[type="email"] {
     color: #f7941d;
     text-decoration: none;
 }
+
+/* Error message styling */
+#login-error {
+    color: #d8000c;
+    background-color: #ffebee;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border: 1px solid #ef9a9a;
+    display: none;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Input error state */
+.input-error {
+    border: 1px solid #d8000c !important;
+    background-color: #ffebee !important;
+}
+
+/* Loading spinner */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Disabled button state */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Make "Forgot Password" more prominent when password error */
+.password-error + .options a {
+    color: #d8000c;
+    font-weight: bold;
+}

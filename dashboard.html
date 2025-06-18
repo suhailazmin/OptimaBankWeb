@@ -2,32 +2,165 @@
 <html>
 <head>
   <title>Dashboard | OptimaBankWeb</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="auth/firebase-config.js"></script>
 </head>
 <body>
-  <div class="auth-container">
-    <h2>Welcome, <span id="user-name"></span>!</h2>
-    <p>You are logged in to OptimaBankWeb.</p>
-    <button id="logout-btn">Logout</button>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+  <div class="navbar-left">
+    <span class="logo">OptimaBank</span>
   </div>
-  <script>
-    // Check auth state and redirect to login if not logged in
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        document.getElementById('user-name').textContent = user.displayName || user.email;
-      } else {
-        window.location.href = "auth/login.html";
-      }
-    });
+  <div class="navbar-center">
+    <a href="#">Home</a>
+    <div class="dropdown">
+      <a href="#" class="dropdown-toggle">Voucher <span class="dropdown-arrow">&#9662;</span></a>
+      <div class="dropdown-menu">
+        <div class="dropdown-item">
+          <div class="dropdown-title">Appliances</div></n>
+          <div class="dropdown-desc">Discounts or credits for home and kitchen gadgets.</div>
+          <span class="dropdown-chevron">&#8250;</span>
+        </div>
+        <div class="dropdown-item">
+          <div class="dropdown-title">Decoration</div>
+          <div class="dropdown-desc">Savings on home décor, furnishings, or festive ornaments.</div>
+          <span class="dropdown-chevron">&#8250;</span>
+        </div>
+        <div class="dropdown-item">
+          <div class="dropdown-title">Cosmetic</div>
+          <div class="dropdown-desc">Deals on skincare, makeup, or beauty products.</div>
+          <span class="dropdown-chevron">&#8250;</span>
+        </div>
+        <div class="dropdown-item">
+          <div class="dropdown-title">Apparel</div>
+          <div class="dropdown-desc">Vouchers for clothing, shoes, or fashion accessories.</div>
+          <span class="dropdown-chevron">&#8250;</span>
+        </div>
+        <div class="dropdown-item">
+          <div class="dropdown-title">Travel</div>
+          <div class="dropdown-desc">Discounts on flights, hotels, or vacation packages.</div>
+          <span class="dropdown-chevron">&#8250;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar-right">
+    <span class="cart-icon">&#128722;</span>
+    <img id="profile-pic" class="profile-pic" src="img/default-profile.png" alt="Profile" />
+    <span id="user-shortname">Aiman Kont</span>
+    <span id="points" class="points">1500 Points</span>
+  </div>
+</nav>
 
-    document.getElementById('logout-btn').onclick = function() {
-      firebase.auth().signOut().then(function() {
-        window.location.href = "auth/login.html";
-      });
-    };
-  </script>
+  <!-- Reward Point Balance Section -->
+  <div class="dashboard-header">
+    <div class="reward-info">
+      <div class="reward-label">Reward Point Balance</div>
+      <div class="reward-points">1500 <span class="coin-icon">🪙</span></div>
+    </div>
+    <!-- Example: Big profile image (optional, can be styled/added later) -->
+    <!-- <img class="header-profile-pic" src="img/default-profile.png" alt="Profile" /> -->
+  </div>
+
+  <!-- Promotions Section -->
+  <div class="promotions-section">
+    <h2 class="promotions-title">Promotions & New deals</h2>
+    <div class="promotions-grid">
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="img/gift-card.png" alt="Promo" class="promo-img">
+        <div class="promo-desc">
+          <strong>10%</strong><br>
+          <span class="promo-points">100 points</span>
+          <div class="promo-body">Body text.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>Loyalty Rewards</h4>
+        <p>Earn points on every purchase and redeem for exclusive rewards and experiences.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Rewards Catalog</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect With Us</h4>
+        <div class="footer-socials">
+          <span class="footer-social"></span>
+          <span class="footer-social"></span>
+          <span class="footer-social"></span>
+        </div>
+        <div class="footer-newsletter">
+          <span>Subscribe to our newsletter</span>
+          <div class="newsletter-input">
+            <input type="email" placeholder="Your email" />
+            <button type="button"></button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Download App</h4>
+        <a href="#" class="footer-app-btn appstore">Download on the<br><strong>App Store</strong></a>
+        <a href="#" class="footer-app-btn googleplay">Get it on<br><strong>Google Play</strong></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2023 Loyalty Rewards. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
 </body>
 </html>
