@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background: #f7f7f7;
 }
 
@@ -55,6 +55,7 @@ body {
 }
 
 /* Dropdown styles */
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -84,7 +85,7 @@ body {
   min-width: 340px;
   background: #7a1fd7;
   border-radius: 16px;
-  box-shadow: 0 6px 32px rgba(44,0,77,0.18);
+  box-shadow: 0 6px 32px rgba(44, 0, 77, 0.18);
   padding: 18px 0;
   z-index: 100;
   flex-direction: column;
@@ -107,7 +108,7 @@ body {
   margin: 0 12px 12px 12px;
   cursor: pointer;
   transition: background 0.2s;
-  box-shadow: 0 1px 6px rgba(44,0,77,0.04);
+  box-shadow: 0 1px 6px rgba(44, 0, 77, 0.04);
 }
 
 .dropdown-item:last-child {
@@ -220,6 +221,7 @@ body {
 }
 
 /* Promotions Section */
+
 .promotions-section {
   background: #fff;
   padding: 40px 0 60px 0;
@@ -250,12 +252,12 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 260px;
-  box-shadow: 0 2px 8px rgba(44,0,77,0.03);
+  box-shadow: 0 2px 8px rgba(44, 0, 77, 0.03);
   transition: box-shadow 0.2s;
 }
 
 .promo-card:hover {
-  box-shadow: 0 4px 16px rgba(44,0,77,0.08);
+  box-shadow: 0 4px 16px rgba(44, 0, 77, 0.08);
 }
 
 .promo-img {
