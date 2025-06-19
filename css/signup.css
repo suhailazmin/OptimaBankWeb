@@ -7,12 +7,25 @@
 }
 
 body {
-  background: #5c008b url("../assets/signup.png") no-repeat center center/cover;
+  background: linear-gradient(rgba(92, 0, 139, 0.3), rgba(92, 0, 139, 0.3)), 
+              url("../assets/signup.png") no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(92, 0, 139, 0.4); /* 30% opacity purple overlay */
+  z-index: -1;
 }
 
 .container {
@@ -22,6 +35,8 @@ body {
   padding: 40px 30px;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
 }
 
 h1 {
