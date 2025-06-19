@@ -1,5 +1,4 @@
-/* Reset and base styling */
-
+/* Updated signup.css */
 * {
   margin: 0;
   padding: 0;
@@ -7,63 +6,55 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* Full-page background */
-
 body {
   height: 100vh;
   width: 100%;
   background: #5c008b url("../assets/signup.png") no-repeat center center/cover;
-  position: relative;
+  background-attachment: fixed; 
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  padding-top: 80px;
 }
-
-/* Overlay for dark tint */
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: #5c008b;
   opacity: 0.85;
   z-index: 0;
 }
 
-/* Main white container */
-
 .container {
   position: relative;
   z-index: 1;
   background-color: white;
   width: 90%;
-  max-width: 700px;
+  max-width: 450px;
   padding: 40px 30px;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  text-align: left;
+  overflow: visible;
+  margin: 20px auto;
 }
 
-/* Heading */
-
 .container h1 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 30px;
   color: #2e0854;
-  text-align: left;
+  text-align: center;
 }
-
-/* Label styling */
 
 label {
   font-weight: 600;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   color: #333;
+  font-size: 14px;
 }
-
-/* Standard input fields */
 
 input[type="text"],
 input[type="email"],
@@ -71,55 +62,53 @@ input[type="password"] {
   width: 100%;
   padding: 12px 15px;
   margin-bottom: 20px;
-  border: none;
-  border-radius: 10px;
-  background-color: #f1f1f1;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f8f8;
   font-size: 14px;
+  transition: border-color 0.3s;
 }
 
-/* Phone number field layout */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #5c008b;
+  background-color: #fff;
+}
 
+/* Phone number field styling */
 .phone-wrapper {
   display: flex;
   align-items: center;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  border: 1px solid #ddd;
   margin-bottom: 20px;
   overflow: hidden;
 }
 
-/* Left part of phone: +60 and arrow */
-
 .prefix-box {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  background-color: #e0e0e0;
-  gap: 8px;
+  padding: 0 15px;
+  background-color: #f0f0f0;
+  height: 100%;
   font-size: 14px;
   font-weight: 500;
   color: #333;
-  border-right: 1px solid #ccc;
-  min-width: 80px;
-  justify-content: space-between;
+  border-right: 1px solid #ddd;
 }
-
-/* +60 text */
 
 .prefix-text {
-  flex-shrink: 0;
+  padding: 12px 0;
 }
-
-/* ▼ dropdown arrow */
 
 .dropdown-arrow {
   font-size: 12px;
   color: #555;
+  margin-left: 8px;
 }
-
-/* Right part: input field only */
 
 .phone-wrapper input[type="tel"] {
   flex: 1;
@@ -130,82 +119,105 @@ input[type="password"] {
   outline: none;
 }
 
-/* Register button */
-
+/* Button styling */
 .register-btn {
   width: 100%;
-  padding: 12px;
-  background-color: #f7941d;
+  padding: 14px;
+  background-color: #FF8300;
   color: white;
-  font-weight: bold;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 15px;
+  transition: background-color 0.3s;
+  margin: 10px 0 20px;
 }
 
 .register-btn:hover {
-  background-color: #e67e00;
+  background-color: #e67600;
 }
 
-/* Google sign-up button */
+/* Divider styling */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+}
 
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.divider::before {
+  margin-right: 15px;
+}
+
+.divider::after {
+  margin-left: 15px;
+}
+
+/* Google button styling */
 .google-btn {
   width: 100%;
   padding: 12px;
-  background-color: #db4437;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .google-btn img {
   width: 20px;
   height: 20px;
+  margin-right: 10px;
 }
 
 .google-btn:hover {
-  background-color: #c1351d;
+  background-color: #f5f5f5;
+  border-color: #ccc;
 }
 
-/* Error message */
-
-.error-message {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Login link */
-
+/* Login link styling */
 .container p {
   text-align: center;
   margin-top: 10px;
   font-size: 14px;
+  color: #666;
 }
 
 .container a {
   color: #5c008b;
   text-decoration: none;
+  font-weight: 600;
 }
 
 .container a:hover {
   text-decoration: underline;
 }
 
-/* Divider */
-
-.divider {
-  padding-bottom: 15px;
-  font-weight: bold;
-  color: #888;
+/* Error message styling */
+.error-message {
+  color: #d8000c;
+  margin: 10px 0;
+  font-size: 14px;
   text-align: center;
+  padding: 10px;
+  background-color: #ffebee;
+  border-radius: 5px;
+  display: none;
 }
