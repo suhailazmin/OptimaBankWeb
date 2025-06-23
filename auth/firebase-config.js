@@ -1,10 +1,11 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyB1TS8Gb2Db2MzzVxlyMWHBrgUJHKitZBU",
-  authDomain: "optimabank-acca4.firebaseapp.com",
-  projectId: "optimabank-acca4",
-  storageBucket: "optimabank-acca4.firebasestorage.app",
-  messagingSenderId: "927584340958",
-  appId: "1:927584340958:web:db82290027150e2075ab4f",
-  measurementId: "G-K7GH8FNMQX"
+  apiKey: "AIzaSyCAezuTfc1gRVzKWWyDifDRCffZcNHN0iY",
+  authDomain: "optimabank-cadbb.firebaseapp.com",
+  projectId: "optimabank-cadbb",
+  storageBucket: "optimabank-cadbb.firebasestorage.app",
+  messagingSenderId: "702761308437",
+  appId: "1:702761308437:web:6dd2c0e37e2d0511f5591c",
+  measurementId: "G-E88PJW9W14"
 };
+
 firebase.initializeApp(firebaseConfig);
