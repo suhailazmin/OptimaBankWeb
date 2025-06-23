@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="auth/firebase-config.js"></script>
 
     <script>
@@ -18,6 +19,29 @@
 </head>
 
 <body>
+    <script>
+        // Listen for authentication state changes
+        firebase.auth().onAuthStateChanged(async function (user) {
+            if (user) {
+                const db = firebase.firestore();
+                try {
+                    const doc = await db.collection('users').doc(user.uid).get();
+                    let displayName = "User";
+                    if (doc.exists) {
+                        displayName = doc.data().name || user.displayName || user.email.split("@")[0];
+                    } else {
+                        displayName = user.displayName || user.email.split("@")[0];
+                    }
+                    document.getElementById("user-shortname").textContent = displayName;
+                    document.getElementById("profile-pic").title = displayName;
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            } else {
+                window.location.href = "auth/login.html";
+            }
+        });
+    </script>
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-left">
@@ -60,8 +84,10 @@
         <div class="navbar-right">
             <span class="cart-icon">&#128722;</span>
             <img id="profile-pic" class="profile-pic" src="img/default-profile.png" alt="Profile" />
-            <span id="user-shortname">Aiman Kont</span>
+            <span id="user-shortname">User...</span>
             <span id="points" class="points">1500 Points</span>
+            <!-- In dashboard.html navbar-right section -->
+            <a href="auth/profile.html">My Profile</a>
             <button onclick="logout()">Logout</button>
         </div>
     </nav>

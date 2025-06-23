@@ -72,7 +72,19 @@ document
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then(() => {
+      .then(async (result) => {
+        // Add this block for Firestore profile creation
+        const user = result.user;
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(user.uid);
+        const doc = await userRef.get();
+        if (!doc.exists) {
+          await userRef.set({
+            name: user.displayName || "",
+            phone: user.phoneNumber || "",
+            email: user.email
+          });
+        }
         window.location.href = "../dashboard.html";
       })
       .catch((error) => {

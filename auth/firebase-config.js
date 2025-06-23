@@ -1,3 +1,4 @@
+// firebase-config.js
 const firebaseConfig = {
   apiKey: "AIzaSyCAezuTfc1gRVzKWWyDifDRCffZcNHN0iY",
   authDomain: "optimabank-cadbb.firebaseapp.com",
@@ -8,4 +9,8 @@ const firebaseConfig = {
   measurementId: "G-E88PJW9W14"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = firebase.firestore();
