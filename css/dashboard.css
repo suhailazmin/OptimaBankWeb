@@ -174,17 +174,6 @@ body {
   border: 2px solid #fff;
 }
 
-.logout-btn {
-  margin-left: 15px;
-  background: #ffb43a;
-  color: #2d014d;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
 .dashboard-header {
   background: linear-gradient(120deg, #4b006e 60%, #2d014d 100%);
   color: #fff;
@@ -406,4 +395,13 @@ body {
   padding: 18px 0 12px 0;
   border-top: 1px solid #2e3450;
   margin-top: 10px;
+}
+
+.total-points-card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(44, 0, 77, 0.08);
+  padding: 32px;
+  text-align: center;
+  min-width: 250px;
 }

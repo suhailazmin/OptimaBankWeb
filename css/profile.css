@@ -1,11 +1,12 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background: linear-gradient(120deg, #7a1fd7 60%, #4b006e 100%);
   min-height: 100vh;
 }
 
 /* Navbar */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -31,7 +32,8 @@ body {
   gap: 32px;
 }
 
-.navbar-center a, .dropdown-toggle {
+.navbar-center a,
+.dropdown-toggle {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -41,7 +43,8 @@ body {
   transition: color 0.2s;
 }
 
-.navbar-center a:hover, .dropdown-toggle:hover {
+.navbar-center a:hover,
+.dropdown-toggle:hover {
   color: #ffb43a;
 }
 
@@ -64,7 +67,7 @@ body {
   min-width: 370px;
   background: #7a1fd7;
   border-radius: 18px;
-  box-shadow: 0 6px 32px rgba(44,0,77,0.18);
+  box-shadow: 0 6px 32px rgba(44, 0, 77, 0.18);
   padding: 18px 0;
   z-index: 100;
   flex-direction: column;
@@ -82,12 +85,12 @@ body {
   border-radius: 12px;
   margin: 10px 16px;
   padding: 14px 24px 10px 20px;
-  box-shadow: 0 2px 12px rgba(44,0,77,0.07);
+  box-shadow: 0 2px 12px rgba(44, 0, 77, 0.07);
   display: flex;
   flex-direction: column;
   position: relative;
   transition: background 0.2s;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 .dropdown-item:hover {
@@ -148,6 +151,7 @@ body {
 }
 
 /* Profile Page Layout */
+
 .profile-container {
   margin: 40px auto 0 auto;
   max-width: 1200px;
@@ -163,7 +167,7 @@ body {
 .profile-card {
   background: #fff;
   border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(44,0,77,0.08);
+  box-shadow: 0 4px 24px rgba(44, 0, 77, 0.08);
   padding: 32px 36px 32px 36px;
   flex: 1;
   min-width: 350px;
@@ -226,7 +230,7 @@ body {
   padding: 10px 18px;
   font-size: 1em;
   margin-bottom: 8px;
-  box-shadow: 2px 3px 6px rgba(44,0,77,0.07);
+  box-shadow: 2px 3px 6px rgba(44, 0, 77, 0.07);
   color: #444;
 }
 
@@ -250,7 +254,7 @@ body {
   padding: 10px 18px;
   font-size: 1em;
   margin-bottom: 8px;
-  box-shadow: 2px 3px 6px rgba(44,0,77,0.07);
+  box-shadow: 2px 3px 6px rgba(44, 0, 77, 0.07);
   color: #444;
 }
 
@@ -294,7 +298,7 @@ body {
   padding: 10px 18px;
   font-size: 1em;
   margin-bottom: 8px;
-  box-shadow: 2px 3px 6px rgba(44,0,77,0.07);
+  box-shadow: 2px 3px 6px rgba(44, 0, 77, 0.07);
   color: #444;
 }
 
@@ -308,7 +312,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   margin-left: 12px;
-  box-shadow: 0 2px 8px rgba(44,0,77,0.08);
+  box-shadow: 0 2px 8px rgba(44, 0, 77, 0.08);
   transition: background 0.2s;
 }
 
@@ -318,6 +322,7 @@ body {
 }
 
 /* Footer styles */
+
 .footer {
   background: #23293a;
   color: #fff;
@@ -441,4 +446,45 @@ body {
   padding: 18px 0 12px 0;
   border-top: 1px solid #2e3450;
   margin-top: 10px;
+}
+
+.total-points-card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(44, 0, 77, 0.08);
+  padding: 32px;
+  text-align: center;
+  min-width: 250px;
+}
+
+.success-message,
+.error-message {
+  display: none;
+  /* Hidden by default */
+  margin-top: 12px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Green background and border for success */
+
+.success-message {
+  color: #145c20;
+  background-color: #e6ffe6;
+  border-color: #5fd97f;
+}
+
+/* Red background and border for error */
+
+.error-message {
+  color: #861f1f;
+  background-color: #ffe6e6;
+  border-color: #ff5a5a;
 }
