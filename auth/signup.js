@@ -57,41 +57,59 @@ document.getElementById("signupForm").addEventListener("submit", async function 
   /* ======================
      FIREBASE REGISTRATION
      ====================== */
+  // Inside the try block of signupForm submit handler
   try {
-    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    
-    await userCredential.user.updateProfile({
-      displayName: name
-    });
+  const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+  await userCredential.user.updateProfile({ displayName: name });
 
-    window.location.href = "../dashboard.html";
+  // ADD THIS: Save profile to Firestore
+  await firebase.firestore().collection('users').doc(userCredential.user.uid).set({
+    name: name,
+    phone: phone,
+    email: email
+  });
 
-  } catch (error) {
-    handleAuthError(error);
-    submitBtn.innerHTML = originalBtnText;
-    submitBtn.disabled = false;
-  }
+  window.location.href = "../dashboard.html";
+} catch (error) {
+  handleAuthError(error);
+  submitBtn.innerHTML = originalBtnText;
+  submitBtn.disabled = false;
+}
 });
 
 // Google Signup (now identical to login.js implementation)
-document.getElementById("google-signup-btn")?.addEventListener("click", function() {
+document.getElementById("google-signup-btn")?.addEventListener("click", function () {
   const errorDiv = document.getElementById("signup-error");
   const googleBtn = this;
   const originalBtnText = googleBtn.innerHTML;
 
   // Clear previous errors
   clearErrors();
-  
+
   // Show loading state
   googleBtn.innerHTML = '<span class="spinner"></span> Continuing with Google...';
   googleBtn.disabled = true;
 
   const provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithPopup(provider)
-    .then(() => {
-      window.location.href = "../dashboard.html";
-    })
+  firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(async (result) => {
+        // Add this block for Firestore profile creation
+        const user = result.user;
+        const db = firebase.firestore();
+        const userRef = db.collection('users').doc(user.uid);
+        const doc = await userRef.get();
+        if (!doc.exists) {
+          await userRef.set({
+            name: user.displayName || "",
+            phone: user.phoneNumber || "",
+            email: user.email
+          });
+        }
+        window.location.href = "../dashboard.html";
+      })
     .catch((error) => {
       googleBtn.innerHTML = originalBtnText;
       googleBtn.disabled = false;

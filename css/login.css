@@ -1,205 +1,225 @@
 /* Global Reset */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
 }
-
 
 /* Make container a flex row */
 
 .container {
-    display: flex;
-    height: 100vh;
-    /* full screen height */
-    width: 100vw;
-    /* full screen width */
+  display: flex;
+  height: 100vh;
+  /* full screen height */
+  width: 100vw;
+  /* full screen width */
 }
 
+h1 {
+  color: #f7941d;
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
 
 /* Make left section take more space */
 
 .left-section {
-    flex: 2;
-    /* Take 2 parts */
-    background: url("../assets/loginpage.png") no-repeat center center/cover;
+  flex: 2;
+  /* Take 2 parts */
+  background: url("../assets/loginpage.png") no-repeat center center/cover;
 }
-
 
 /* Right section takes less space */
 
 .right-section {
-    flex: 1;
-    /* Take 1 part */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #5c008b;
-    /* Optional */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center horizontally */
+  justify-content: center;
+  background-color: #5c008b;
+  padding: 20px;
 }
 
+.logo-link {
+  margin-bottom: 20px;
+  /* Space between logo and login box */
+}
+
+.logo {
+  width: 80px;
+  /* Adjust logo size as needed */
+  height: auto;
+}
 
 /* Login box */
 
 h1,
 h2 {
-    text-align: center;
+  text-align: center;
 }
 
 .login-box {
-    background-color: white;
-    padding: 40px 30px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 400px;
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .brand {
-    color: #f7941d;
-    font-size: 32px;
-    margin-bottom: 10px;
+  color: #f7941d;
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .login-title {
-    font-size: 22px;
-    margin-bottom: 30px;
-    color: #333;
+  font-size: 22px;
+  margin-bottom: 30px;
+  color: #333;
 }
-
 
 /* Input fields */
 
 input[type="text"],
 input[type="password"],
 input[type="email"] {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
 }
-
 
 /* Remember + Forgot */
 
 .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 .options a {
-    text-decoration: none;
-    color: #5c008b;
+  text-decoration: none;
+  color: #5c008b;
 }
-
 
 /* Divider */
 
 .divider {
-    margin: 20px 0;
-    font-weight: bold;
-    color: #888;
-    text-align: center;
+  margin: 20px 0;
+  font-weight: bold;
+  color: #888;
+  text-align: center;
 }
-
 
 /* Google Button */
 
 .google-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .google-btn img {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
-
 
 /* Login Button */
 
 .login-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #f7941d;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+  width: 100%;
+  padding: 12px;
+  background-color: #f7941d;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
-
 
 /* Sign up link */
 
 .signup-link {
-    margin-top: 20px;
-    font-size: 14px;
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .signup-link a {
-    color: #f7941d;
-    text-decoration: none;
+  color: #f7941d;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
 }
 
 /* Error message styling */
+
 #login-error {
-    color: #d8000c;
-    background-color: #ffebee;
-    padding: 12px;
-    border-radius: 8px;
-    margin: 15px 0;
-    border: 1px solid #ef9a9a;
-    display: none;
-    font-size: 14px;
-    text-align: center;
+  color: #d8000c;
+  background-color: #ffebee;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid #ef9a9a;
+  display: none;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* Input error state */
+
 .input-error {
-    border: 1px solid #d8000c !important;
-    background-color: #ffebee !important;
+  border: 1px solid #d8000c !important;
+  background-color: #ffebee !important;
 }
 
 /* Loading spinner */
+
 .spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 1s ease-in-out infinite;
-    margin-right: 8px;
-    vertical-align: middle;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Disabled button state */
+
 button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* Make "Forgot Password" more prominent when password error */
+
 .password-error + .options a {
-    color: #d8000c;
-    font-weight: bold;
+  color: #d8000c;
+  font-weight: bold;
 }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Profile | OptimaBankWeb</title>
+    <link rel="stylesheet" href="../css/profile.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+      function logout() {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            window.location.href = "../auth/login.html";
+          });
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="loader-overlay" id="loader">
+      <div class="spinner"></div>
+    </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <span class="logo">OptimaBank</span>
+      </div>
+      <div class="navbar-center">
+        <a href="../dashboard.html">Home</a>
+        <div class="dropdown" id="voucherDropdown">
+          <a href="#" class="dropdown-toggle" id="dropdownBtn"
+            >Voucher <span class="dropdown-arrow">&#9662;</span></a
+          >
+          <div class="dropdown-menu" id="dropdownMenu">
+            <div class="dropdown-item">
+              <div class="dropdown-title">Appliances</div>
+              <div class="dropdown-desc">
+                Discounts or credits for home and kitchen gadgets.
+              </div>
+              <span class="dropdown-chevron">&#8250;</span>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-title">Decoration</div>
+              <div class="dropdown-desc">
+                Savings on home décor, furnishings, or festive ornaments.
+              </div>
+              <span class="dropdown-chevron">&#8250;</span>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-title">Cosmetic</div>
+              <div class="dropdown-desc">
+                Deals on skincare, makeup, or beauty products.
+              </div>
+              <span class="dropdown-chevron">&#8250;</span>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-title">Apparel</div>
+              <div class="dropdown-desc">
+                Vouchers for clothing, shoes, or fashion accessories.
+              </div>
+              <span class="dropdown-chevron">&#8250;</span>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-title">Travel</div>
+              <div class="dropdown-desc">
+                Discounts on flights, hotels, or vacation packages.
+              </div>
+              <span class="dropdown-chevron">&#8250;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <span class="cart-icon">&#128722;</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+
+    <div class="profile-container">
+      <form id="profileForm">
+        <div class="profile-row">
+          <div class="profile-card personal-details">
+            <h2>Personal Details</h2>
+            <div class="personal-content">
+              <div class="profile-image">
+                <img src="../assets/default-profile.png" alt="Profile" />
+              </div>
+              <div class="profile-fields">
+                <label for="profile-name">Full Name:</label>
+                <input type="text" id="profile-name" required />
+
+                <label for="profile-email">Email (read-only):</label>
+                <input type="email" id="profile-email" readonly />
+
+                <label for="profile-phone">Phone Number:</label>
+                <input type="tel" id="profile-phone" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-card contact-details">
+            <h2>About Me</h2>
+            <div class="contact-fields">
+              <label>Address 1:</label>
+              <input
+                type="text"
+                value="Lot 1920,Taman Intan Baiduri, Jalan Baiduri"
+                readonly
+              />
+              <label>Address 2:</label>
+              <input type="text" value="-" readonly />
+              <label>Address 3:</label>
+              <input type="text" value="-" readonly />
+              <div class="row">
+                <div>
+                  <label>Postcode:</label
+                  ><input type="text" value="78300" readonly />
+                </div>
+                <div>
+                  <label>State:</label
+                  ><input type="text" value="Perak" readonly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-row">
+          <!-- Total Points Card -->
+          <div
+            class="profile-card total-points-card"
+            style="
+              flex: 0.5;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <h2 style="margin-bottom: 20px">Total Points</h2>
+            <div style="font-size: 2.5em; font-weight: bold; color: #ff9800">
+              1500
+            </div>
+          </div>
+        </div>
+
+        <!-- Centered Save Button -->
+        <div style="padding: 20px; text-align: center">
+          <button class="orange-btn" type="submit">Save Changes</button>
+          <div id="profile-success" class="success-message"></div>
+          <div id="profile-error" class="error-message"></div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h4>Loyalty Rewards</h4>
+          <p>
+            Earn points on every purchase and redeem for exclusive rewards and
+            experiences.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Rewards Catalog</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect With Us</h4>
+          <div class="footer-socials">
+            <span class="footer-social"></span
+            ><span class="footer-social"></span
+            ><span class="footer-social"></span>
+          </div>
+          <div class="footer-newsletter">
+            <span>Subscribe to our newsletter</span>
+            <div class="newsletter-input">
+              <input type="email" placeholder="Your email" /><button
+                type="button"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Download App</h4>
+          <a href="#" class="footer-app-btn appstore"
+            >Download on the<br /><strong>App Store</strong></a
+          ><a href="#" class="footer-app-btn googleplay"
+            >Get it on<br /><strong>Google Play</strong></a
+          >
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2023 Loyalty Rewards. All rights reserved.
+      </div>
+    </footer>
+
+    <!-- Dropdown script -->
+    <script>
+      const dropdown = document.getElementById("voucherDropdown");
+      const btn = document.getElementById("dropdownBtn");
+      document.addEventListener("click", function (e) {
+        if (btn.contains(e.target)) {
+          e.preventDefault();
+          dropdown.classList.toggle("open");
+        } else if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+        }
+      });
+    </script>
+    <script src="profile.js"></script>
+  </body>
+</html>
