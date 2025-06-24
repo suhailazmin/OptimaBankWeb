@@ -1,88 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Sign Up | OptimaBank</title>
-  <link rel="stylesheet" href="../css/signup.css">
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script> 
-  <script src="firebase-config.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h1>OptimaBank</h1>
-    <h2>REGISTER USER</h2>
-    
-    <form id="signupForm">
-      <!-- Username -->
-      <label for="signup-name">Username</label>
-      <input
-        type="text"
-        id="signup-name"
-        placeholder="Insert your username"
-        required
-      >
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sign Up | OptimaBank</title>
+    <link rel="stylesheet" href="../css/signup.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+  </head>
 
-      <!-- Email -->
-      <label for="signup-email">Email</label>
-      <input
-        type="email"
-        id="signup-email"
-        placeholder="Insert your email"
-        required
-      >
+  <body>
+    <div class="container">
+      <h1>OptimaBank</h1>
+      <h2>REGISTER USER</h2>
 
-      <!-- Phone Number -->
-      <label for="phone">Phone Number</label>
-      <div class="phone-input">
-        <span class="country-code">+60</span>
+      <form id="signupForm">
+        <!-- Username -->
+        <label for="signup-name">Full Name</label>
         <input
-          type="tel"
-          id="phone"
-          placeholder="Insert your phone number"
+          type="text"
+          id="signup-name"
+          placeholder="Insert your Full Name"
           required
-        >
-      </div>
+        />
 
-      <!-- Password -->
-      <label for="signup-password">Password</label>
-      <input
-        type="password"
-        id="signup-password"
-        placeholder="Insert your password"
-        required
-      >
+        <!-- Email -->
+        <label for="signup-email">Email</label>
+        <input
+          type="email"
+          id="signup-email"
+          placeholder="Insert your email"
+          required
+        />
 
-      <!-- Confirm Password -->
-      <label for="signup-confirm">Re-Enter Password</label>
-      <input
-        type="password"
-        id="signup-confirm"
-        placeholder="Re-enter your password"
-        required
-      >
+        <!-- Phone Number -->
+        <label for="phone">Phone Number</label>
+        <div class="phone-input">
+          <span class="country-code">+60</span>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="Insert your phone number"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <label for="signup-password">Password</label>
+        <input
+          type="password"
+          id="signup-password"
+          placeholder="Insert your password"
+          required
+        />
+
+        <!-- Confirm Password -->
+        <label for="signup-confirm">Re-Enter Password</label>
+        <input
+          type="password"
+          id="signup-confirm"
+          placeholder="Re-enter your password"
+          required
+        />
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="register-btn">REGISTER</button>
+      </form>
 
       <!-- Divider -->
-      <div class="divider"></div>
-
-      <!-- Submit Button -->
-      <button type="submit" class="register-btn">REGISTER</button>
-    </form>
-
-    <!-- Divider -->
       <div class="divider2"></div>
 
-    <!-- Google Signup -->
-    <button id="google-signup-btn" class="google-btn">
-      <img src="../assets/google-color.png" alt="Google icon">
-      Sign up with Google
-    </button>
+      <!-- Google Signup -->
+      <button id="google-signup-btn" class="google-btn">
+        <img src="../assets/google-color.png" alt="Google icon" />
+        Sign up with Google
+      </button>
 
-    <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
-    <div id="signup-error" class="error-message"></div>
-  </div>
+      <p class="login-link">
+        Already have an account? <a href="login.html">Login</a>
+      </p>
+      <div id="signup-error" class="error-message"></div>
+    </div>
 
-  <script src="signup.js"></script>
-</body>
+    <script src="signup.js"></script>
+  </body>
 </html>
