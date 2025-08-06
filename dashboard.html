@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="auth/firebase-config.js"></script>
+    <script src="user_points.js"></script>
 
     <script>
       function logout() {
@@ -110,7 +111,8 @@
           />
         </a>
         <span id="user-shortname">loading...</span>
-        <span id="points" class="points">1500 Points</span>
+
+        <span id="points-header" class="points"> counting... Points</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
     </nav>
@@ -119,7 +121,9 @@
     <div class="dashboard-header">
       <div class="reward-info">
         <div class="reward-label">Reward Point Balance</div>
-        <div class="reward-points">1500 <span class="coin-icon">🪙</span></div>
+        <div class="reward-points" id="points-balance">
+          counting.. <span class="coin-icon">🪙</span>
+        </div>
       </div>
       <!-- Example: Big profile image (optional, can be styled/added later) -->
       <!-- <img class="header-profile-pic" src="img/default-profile.png" alt="Profile" /> -->
