@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Vouchers with Specific Field Types</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="auth/firebase-config.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        text-align: center;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      #status {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Add Voucher (Reference + Timestamp + String Types)</h2>
+    <button id="addVoucherBtn">Add Voucher</button>
+    <div id="status"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const statusEl = document.getElementById("status");
+
+        // Safety: Ensure Firebase loaded
+        if (!firebase.apps.length) {
+          console.error("Firebase not initialized. Check firebase-config.js");
+          statusEl.textContent = "Firebase not initialized.";
+          statusEl.style.color = "red";
+          return;
+        }
+
+        const db = firebase.firestore();
+        console.log("Firestore initialized");
+
+        async function addVoucher() {
+          statusEl.textContent = "Adding voucher...";
+          statusEl.style.color = "black";
+          console.log("Button clicked. Preparing voucher...");
+
+          try {
+            const voucher = {
+              category_id: db.doc("categories/food"), // Reference
+              created_date: firebase.firestore.Timestamp.fromDate(
+                new Date("2025-08-06T14:57:08Z")
+              ),
+              description: "Get RM10 off at Pizahut's",
+              image: "url_or_base64",
+              is_latest: "true",
+              points: "50",
+              terms_and_condition: "Valid until 31 Dec 2025",
+              title: "RM10 Pizahut Voucher",
+            };
+
+            console.log("Voucher object:", voucher);
+
+            await db.collection("vouchers").add(voucher);
+
+            statusEl.textContent = "Voucher added successfully!";
+            statusEl.style.color = "green";
+            console.log("Voucher added!");
+          } catch (error) {
+            console.error("Error adding voucher:", error);
+            statusEl.textContent = "Failed to add voucher.";
+            statusEl.style.color = "red";
+          }
+        }
+
+        document
+          .getElementById("addVoucherBtn")
+          .addEventListener("click", addVoucher);
+      });
+    </script>
+  </body>
+</html>

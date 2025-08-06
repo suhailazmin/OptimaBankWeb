@@ -98,7 +98,9 @@
         </div>
       </div>
       <div class="navbar-right">
-        <span class="cart-icon">&#128722;</span>
+        <a href="items/cart.html">
+          <span class="cart-icon">&#128722;</span>
+        </a>
         <a href="auth/profile.html">
           <img
             id="profile-pic"
@@ -123,8 +125,122 @@
       <!-- <img class="header-profile-pic" src="img/default-profile.png" alt="Profile" /> -->
     </div>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const voucherListEl = document.getElementById("voucher-list");
+
+        // Add to Firestore cart_items
+        async function addToCart(userId, voucherId) {
+          try {
+            const userRef = db.collection("users").doc(userId);
+            const voucherRef = db.collection("vouchers").doc(voucherId);
+
+            // Check if this voucher is already in user's cart
+            const querySnapshot = await db
+              .collection("cart_items")
+              .where("user_id", "==", userRef)
+              .where("voucher_id", "==", voucherRef)
+              .get();
+
+            if (!querySnapshot.empty) {
+              // Already exists → Update quantity
+              const doc = querySnapshot.docs[0];
+              const currentQty = parseInt(doc.data().quantity) || 1; // Ensure it's a number
+              await db
+                .collection("cart_items")
+                .doc(doc.id)
+                .update({
+                  quantity: currentQty + 1,
+                });
+            } else {
+              // New cart item → Add new document with quantity 1
+              await db.collection("cart_items").add({
+                user_id: userRef,
+                voucher_id: voucherRef,
+                quantity: 1,
+              });
+            }
+
+            alert("Voucher added to cart!");
+          } catch (error) {
+            console.error("Error adding to cart:", error);
+            alert("Failed to add to cart. Please try again.");
+          }
+        }
+
+        try {
+          const user = auth.currentUser;
+
+          // Wait for user to be authenticated
+          if (!user) {
+            auth.onAuthStateChanged(async (user) => {
+              if (user) {
+                await loadVouchers(user.uid);
+              } else {
+                voucherListEl.innerHTML =
+                  "<p>Please log in to view and add vouchers to cart.</p>";
+              }
+            });
+          } else {
+            await loadVouchers(user.uid);
+          }
+
+          async function loadVouchers(userId) {
+            const snapshot = await db.collection("vouchers").get();
+            const vouchers = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+
+            voucherListEl.innerHTML = "";
+
+            if (!vouchers.length) {
+              voucherListEl.innerHTML =
+                "<p>No vouchers available right now.</p>";
+              return;
+            }
+
+            vouchers.forEach((voucher) => {
+              const card = document.createElement("div");
+              card.className = "promo-card";
+              card.innerHTML = `
+            <img src="${
+              voucher.image || "../assets/giftcard.jpg"
+            }" alt="Promo" class="promo-img" />
+            <div class="promo-desc">
+              <strong>${voucher.title || "Voucher"}</strong><br />
+              <span class="promo-points">${voucher.points || 0} points</span>
+              <div class="promo-body">${voucher.description || ""}</div>
+              <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+          `;
+
+              const button = card.querySelector(".add-to-cart-btn");
+              button.addEventListener("click", () =>
+                addToCart(userId, voucher.id)
+              );
+
+              voucherListEl.appendChild(card);
+            });
+          }
+        } catch (error) {
+          console.error("Error loading vouchers:", error);
+          voucherListEl.innerHTML = "<p>Error loading vouchers.</p>";
+        }
+      });
+    </script>
+
     <!-- Promotions Section -->
     <div class="promotions-section">
+      <h2 class="promotions-title">Promotions & New deals</h2>
+      <div class="promotions-grid" id="voucher-list">
+        <p>Loading vouchers...</p>
+      </div>
+    </div>
+
+    <!-- <div class="promotions-section">
       <h2 class="promotions-title">Promotions & New deals</h2>
       <div class="promotions-grid">
         <div class="promo-card">
@@ -176,7 +292,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Footer Section -->
     <footer class="footer">
