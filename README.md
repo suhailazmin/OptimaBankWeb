@@ -6,6 +6,8 @@ npm install dotenv
 npm install express
 npm install cors express body-parser
 
+run mongodb\mongo_server.js
+
 == FIREBASE STRUCTURE ==
 
 ✅ 1. users Collection → /users/{userId}
