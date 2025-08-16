@@ -186,16 +186,17 @@
           const imageInput = document.getElementById(`image-${id}`);
           let imageId = null;
 
-          // Fetch voucher from Firestore
+          // Fetch existing voucher
           const voucherDoc = await db.collection("vouchers").doc(id).get();
           const voucherData = voucherDoc.exists ? voucherDoc.data() : {};
 
-          // Case 1: User selected a new image → upload and assign new ID
+          // Upload new image if selected
           if (imageInput.files && imageInput.files[0]) {
             const file = imageInput.files[0];
             const reader = new FileReader();
-            const base64Data = await new Promise((resolve) => {
-              reader.onload = (event) => resolve(event.target.result);
+            const base64Data = await new Promise((resolve, reject) => {
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = (err) => reject(err);
               reader.readAsDataURL(file);
             });
 
@@ -208,20 +209,11 @@
             if (result.success) imageId = result.id;
           }
 
-          // Case 2: No new image selected
+          // If no new image, keep existing or empty
           if (!imageId) {
-            // If voucher has no image yet → assign a new image ID (default placeholder or blank)
-            if (!voucherData.image) {
-              // Optional: upload a default placeholder image to MongoDB
-              // Or leave it blank
-              imageId = "";
-            } else {
-              // Keep existing image ID
-              imageId = voucherData.image;
-            }
+            imageId = voucherData.image || "";
           }
 
-          // Update voucher in Firestore
           await db.collection("vouchers").doc(id).set(
             {
               title,
