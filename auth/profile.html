@@ -21,6 +21,42 @@
           });
       }
     </script>
+    <style>
+      .profile-image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        /* space between img and input */
+      }
+
+      .profile-image img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+      }
+
+      .profile-image input {
+        margin-top: 5px;
+      }
+
+      .upload-btn {
+        margin-top: 8px;
+        padding: 6px 14px;
+        background-color: #ff9800;
+        color: white;
+        font-size: 0.9em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .upload-btn:hover {
+        background-color: #e68900;
+      }
+    </style>
   </head>
 
   <body>
@@ -90,7 +126,20 @@
             <h2>Personal Details</h2>
             <div class="personal-content">
               <div class="profile-image">
-                <img src="../assets/default-profile.png" alt="Profile" />
+                <img
+                  id="profile-image-preview"
+                  src="../assets/default-profile.png"
+                  alt="Profile"
+                />
+                <label for="profile-image-upload" class="upload-btn"
+                  >Upload Photo</label
+                >
+                <input
+                  type="file"
+                  id="profile-image-upload"
+                  accept="image/*"
+                  hidden
+                />
               </div>
               <div class="profile-fields">
                 <label for="profile-name">Full Name:</label>
@@ -101,33 +150,32 @@
 
                 <label for="profile-phone">Phone Number:</label>
                 <input type="tel" id="profile-phone" required />
+
+                <label for="profile-username">Username:</label>
+                <input type="text" id="profile-username" />
               </div>
             </div>
           </div>
 
           <div class="profile-card contact-details">
-            <h2>About Me</h2>
+            <h2>Details</h2>
             <div class="contact-fields">
-              <label>Address 1:</label>
+              <!-- About field -->
+              <label for="profile-about">About Me:</label>
+              <textarea
+                id="profile-about"
+                rows="3"
+                placeholder="Tell us about yourself..."
+              ></textarea>
+
+              <!-- Single Address (combine Address 1–3, postcode, state) -->
+              <label for="profile-address">Address:</label>
               <input
                 type="text"
-                value="Lot 1920,Taman Intan Baiduri, Jalan Baiduri"
+                id="profile-address"
+                value="Lot 1920,Taman Intan Baiduri, Jalan Baiduri, 78300, Perak"
                 readonly
               />
-              <label>Address 2:</label>
-              <input type="text" value="-" readonly />
-              <label>Address 3:</label>
-              <input type="text" value="-" readonly />
-              <div class="row">
-                <div>
-                  <label>Postcode:</label
-                  ><input type="text" value="78300" readonly />
-                </div>
-                <div>
-                  <label>State:</label
-                  ><input type="text" value="Perak" readonly />
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -151,6 +199,11 @@
             >
               counting..
             </div>
+            <!-- Hidden inputs required for JS -->
+            <input type="hidden" id="profile-points" />
+            <input type="hidden" id="profile-active" />
+            <input type="hidden" id="profile-image" />
+            <input type="hidden" id="profile-updated" />
           </div>
         </div>
 

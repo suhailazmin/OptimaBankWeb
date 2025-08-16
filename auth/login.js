@@ -76,13 +76,14 @@ document
         // Add this block for Firestore profile creation
         const user = result.user;
         const db = firebase.firestore();
-        const userRef = db.collection('users').doc(user.uid);
+        const userRef = db.collection("users").doc(user.uid);
         const doc = await userRef.get();
         if (!doc.exists) {
           await userRef.set({
             name: user.displayName || "",
             phone: user.phoneNumber || "",
-            email: user.email
+            email: user.email,
+            points: "500",
           });
         }
         window.location.href = "../dashboard.html";

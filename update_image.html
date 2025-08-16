@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Voucher Management</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="auth/firebase-config.js"></script>
+    <style>
+      body {
+        font-family: Arial;
+        max-width: 1000px;
+        margin: 40px auto;
+      }
+      h2 {
+        text-align: center;
+      }
+      .voucher-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .voucher-card img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+      .voucher-details {
+        flex: 1;
+      }
+      .voucher-actions button {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Voucher Management</h2>
+
+    <!-- Add Voucher Form -->
+    <div>
+      <input type="text" id="title" placeholder="Title" />
+      <input type="text" id="description" placeholder="Description" />
+      <input type="number" id="points" placeholder="Points" />
+      <input type="file" id="voucher-image-upload" accept="image/*" />
+      <button id="addVoucherBtn">Add Voucher</button>
+      <div id="status"></div>
+    </div>
+
+    <hr />
+
+    <!-- Voucher List -->
+    <div id="voucherList">
+      <p>Loading vouchers...</p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const db = firebase.firestore();
+        const voucherListEl = document.getElementById("voucherList");
+        const statusEl = document.getElementById("status");
+
+        let tempImageBase64 = null;
+
+        // Handle image preview for new voucher
+        document
+          .getElementById("voucher-image-upload")
+          .addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => (tempImageBase64 = event.target.result);
+            reader.readAsDataURL(file);
+          });
+
+        // Add Voucher
+        document
+          .getElementById("addVoucherBtn")
+          .addEventListener("click", async () => {
+            const title = document.getElementById("title").value.trim();
+            const description = document
+              .getElementById("description")
+              .value.trim();
+            const points = document.getElementById("points").value.trim();
+
+            if (!title || !description || !points) {
+              statusEl.textContent = "Please fill all fields.";
+              statusEl.style.color = "red";
+              return;
+            }
+
+            let imageId = "";
+            if (tempImageBase64) {
+              const res = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  type: "voucher",
+                  data: tempImageBase64,
+                }),
+              });
+              const result = await res.json();
+              if (result.success) imageId = result.id;
+            }
+
+            const voucher = {
+              title,
+              description,
+              points,
+              image: imageId || "", // MongoDB image ID
+              is_latest: "true",
+              created_date: firebase.firestore.Timestamp.fromDate(new Date()),
+            };
+
+            await db.collection("vouchers").add(voucher);
+            statusEl.textContent = "Voucher added successfully!";
+            statusEl.style.color = "green";
+            tempImageBase64 = null;
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("points").value = "";
+            loadVouchers();
+          });
+
+        // Load vouchers
+        async function loadVouchers() {
+          const snapshot = await db.collection("vouchers").get();
+          const vouchers = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          voucherListEl.innerHTML = "";
+
+          if (!vouchers.length) {
+            voucherListEl.innerHTML = "<p>No vouchers.</p>";
+            return;
+          }
+
+          for (const voucher of vouchers) {
+            const div = document.createElement("div");
+            div.className = "voucher-card";
+            div.innerHTML = `
+          <div><strong>Voucher ID:</strong> ${voucher.id}</div>
+          <div><strong>Image ID:</strong> ${voucher.image || "None"}</div>
+          <img src="${
+            voucher.image
+              ? "http://localhost:3000/image/" + voucher.image
+              : "../assets/giftcard.jpg"
+          }" alt="Voucher" />
+          <div class="voucher-details">
+            <input type="text" value="${voucher.title}" id="title-${
+              voucher.id
+            }" /><br/>
+            <input type="text" value="${voucher.description}" id="desc-${
+              voucher.id
+            }" /><br/>
+            <input type="number" value="${voucher.points}" id="points-${
+              voucher.id
+            }" /><br/>
+            <input type="file" id="image-${voucher.id}" accept="image/*" />
+          </div>
+          <div class="voucher-actions">
+            <button onclick="updateVoucher('${voucher.id}')">Update</button>
+            <button onclick="deleteVoucher('${voucher.id}')">Delete</button>
+          </div>
+        `;
+            voucherListEl.appendChild(div);
+          }
+        }
+
+        // Update Voucher
+        window.updateVoucher = async (id) => {
+          const title = document.getElementById(`title-${id}`).value.trim();
+          const desc = document.getElementById(`desc-${id}`).value.trim();
+          const points = document.getElementById(`points-${id}`).value.trim();
+
+          if (!title || !desc || !points) {
+            return alert("All fields are required.");
+          }
+
+          const imageInput = document.getElementById(`image-${id}`);
+          let imageId = null;
+
+          // Fetch voucher from Firestore
+          const voucherDoc = await db.collection("vouchers").doc(id).get();
+          const voucherData = voucherDoc.exists ? voucherDoc.data() : {};
+
+          // Case 1: User selected a new image → upload and assign new ID
+          if (imageInput.files && imageInput.files[0]) {
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+            const base64Data = await new Promise((resolve) => {
+              reader.onload = (event) => resolve(event.target.result);
+              reader.readAsDataURL(file);
+            });
+
+            const res = await fetch("http://localhost:3000/upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ type: "voucher", data: base64Data }),
+            });
+            const result = await res.json();
+            if (result.success) imageId = result.id;
+          }
+
+          // Case 2: No new image selected
+          if (!imageId) {
+            // If voucher has no image yet → assign a new image ID (default placeholder or blank)
+            if (!voucherData.image) {
+              // Optional: upload a default placeholder image to MongoDB
+              // Or leave it blank
+              imageId = "";
+            } else {
+              // Keep existing image ID
+              imageId = voucherData.image;
+            }
+          }
+
+          // Update voucher in Firestore
+          await db.collection("vouchers").doc(id).set(
+            {
+              title,
+              description: desc,
+              points,
+              image: imageId,
+            },
+            { merge: true }
+          );
+
+          alert("Voucher updated successfully!");
+          loadVouchers();
+        };
+
+        // Initial load
+        loadVouchers();
+      });
+    </script>
+  </body>
+</html>

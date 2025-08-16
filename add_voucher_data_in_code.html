@@ -29,7 +29,8 @@
   </head>
 
   <body>
-    <h2>Add Voucher (Reference + Timestamp + String Types)</h2>
+    <h2>Add Voucher (Reference + Timestamp + Image in MongoDB)</h2>
+    <input type="file" id="voucher-image-upload" accept="image/*" />
     <button id="addVoucherBtn">Add Voucher</button>
     <div id="status"></div>
 
@@ -37,7 +38,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         const statusEl = document.getElementById("status");
 
-        // Safety: Ensure Firebase loaded
         if (!firebase.apps.length) {
           console.error("Firebase not initialized. Check firebase-config.js");
           statusEl.textContent = "Firebase not initialized.";
@@ -48,19 +48,57 @@
         const db = firebase.firestore();
         console.log("Firestore initialized");
 
+        let tempImageBase64 = null;
+
+        // Preview and store image temporarily
+        const imageInput = document.getElementById("voucher-image-upload");
+        imageInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            tempImageBase64 = event.target.result; // store temporarily
+            console.log("Image loaded for upload:", tempImageBase64);
+          };
+          reader.readAsDataURL(file);
+        });
+
         async function addVoucher() {
           statusEl.textContent = "Adding voucher...";
           statusEl.style.color = "black";
           console.log("Button clicked. Preparing voucher...");
 
           try {
+            const voucherId = db.collection("vouchers").doc().id; // generate ID
+            let imageId = null;
+
+            if (tempImageBase64) {
+              const res = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  type: "voucher",
+                  voucher_id: voucherId,
+                  data: tempImageBase64,
+                }),
+              });
+              const result = await res.json();
+              if (result.success) {
+                imageId = result.id;
+                console.log("Image saved to MongoDB with ID:", imageId);
+              }
+            }
+
             const voucher = {
-              category_id: db.doc("categories/food"), // Reference
+              category_id: db.doc("categories/food"),
               created_date: firebase.firestore.Timestamp.fromDate(
                 new Date("2025-08-06T14:57:08Z")
               ),
               description: "Get RM10 off at Pizahut's",
-              image: "url_or_base64",
+              image: imageId || "",
               is_latest: "true",
               points: "50",
               terms_and_condition: "Valid until 31 Dec 2025",
@@ -69,11 +107,13 @@
 
             console.log("Voucher object:", voucher);
 
-            await db.collection("vouchers").add(voucher);
+            await db.collection("vouchers").doc(voucherId).set(voucher); // use voucherId
 
             statusEl.textContent = "Voucher added successfully!";
             statusEl.style.color = "green";
             console.log("Voucher added!");
+            imageInput.value = ""; // clear file input
+            tempImageBase64 = null;
           } catch (error) {
             console.error("Error adding voucher:", error);
             statusEl.textContent = "Failed to add voucher.";

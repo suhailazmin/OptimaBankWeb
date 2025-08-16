@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OptimaBank Images</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+      }
+
+      img {
+        max-width: 200px;
+        margin: 10px;
+        border: 1px solid #ccc;
+      }
+
+      #gallery {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>OptimaBank Images</h1>
+
+    <input type="file" id="fileInput" />
+    <button onclick="uploadImage()">Insert Image</button>
+    <button onclick="getImages()">Get All Images</button>
+
+    <div id="gallery"></div>
+
+    <script>
+      async function uploadImage() {
+        const fileInput = document.getElementById("fileInput");
+        if (!fileInput.files[0]) {
+          alert("Please select a file first!");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = async function () {
+          const base64Data = reader.result.split(",")[1];
+
+          try {
+            const response = await fetch("http://localhost:3000/upload", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                type: "profile",
+                user_id: "demo_user", // change if needed
+                data: base64Data,
+              }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              alert(`✅ Image uploaded successfully! ID: ${result.id}`);
+            } else {
+              alert(`❌ Failed to upload: ${result.error}`);
+            }
+          } catch (err) {
+            alert("⚠️ Error connecting to server: " + err.message);
+          }
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+
+      async function getImages() {
+        try {
+          const res = await fetch("http://localhost:3000/images");
+          const images = await res.json();
+
+          const gallery = document.getElementById("gallery");
+          gallery.innerHTML = "";
+
+          images.forEach((img) => {
+            const imageElement = document.createElement("img");
+            imageElement.src = `data:image/png;base64,${img.data}`;
+            gallery.appendChild(imageElement);
+          });
+        } catch (err) {
+          alert("⚠️ Failed to load images: " + err.message);
+        }
+      }
+    </script>
+  </body>
+</html>

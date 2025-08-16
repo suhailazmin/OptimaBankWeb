@@ -9,8 +9,7 @@ firebase.auth().onAuthStateChanged(async (user) => {
   const db = firebase.firestore();
 
   try {
-    // Get cart items where user_id == current user
-    const userRef = db.doc(`users/${user.uid}`);
+    const userRef = db.collection("users").doc(user.uid);
     const cartSnapshot = await db
       .collection("cart_items")
       .where("user_id", "==", userRef)
@@ -26,18 +25,29 @@ firebase.auth().onAuthStateChanged(async (user) => {
     for (const doc of cartSnapshot.docs) {
       const cartItem = doc.data();
 
-      // Fetch voucher details from the reference
-      const voucherDoc = await cartItem.voucher_id.get();
-      const voucher = voucherDoc.exists
-        ? voucherDoc.data()
-        : { title: "Unknown Voucher", points: "N/A" };
+      let voucher = { title: "Unknown Voucher", points: "N/A" };
+
+      if (cartItem.voucher_id) {
+        // If voucher_id is a DocumentReference
+        if (typeof cartItem.voucher_id.get === "function") {
+          const voucherDoc = await cartItem.voucher_id.get();
+          if (voucherDoc.exists) voucher = voucherDoc.data();
+        } else {
+          // If voucher_id is stored as string ID
+          const voucherDoc = await db
+            .collection("vouchers")
+            .doc(cartItem.voucher_id)
+            .get();
+          if (voucherDoc.exists) voucher = voucherDoc.data();
+        }
+      }
 
       const div = document.createElement("div");
       div.className = "cart-item";
       div.innerHTML = `
         <strong>${voucher.title}</strong><br/>
-        Quantity: ${cartItem.quantity}<br/>
-        Points: ${voucher.points}
+        Quantity: ${cartItem.quantity || 1}<br/>
+        Points: ${voucher.points || 0}
       `;
       cartEl.appendChild(div);
     }

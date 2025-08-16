@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "68a0fa6eec6db01680ecb4f5",
+    "user_id": "QNplOY8fdzR9dO7nNOCA1HHU6qF3",
+    "type": "profile",
+    "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA2QAAASECAMAAAA81Tz2AAAD…",
+    "createdAt": "2025-08-16T21:38:54.480Z",
+    "updatedAt": "2025-08-16T21:38:54.480Z"
+  },
+  {
+    "_id": "68a0fa6eec6db01680ecb4f6",
+    "user_id": "asdasds",
+    "type": "voucher",
+    "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA2QAAASECAMAAAA81Tz2AAAD…",
+    "createdAt": "2025-08-16T21:38:54.480Z",
+    "updatedAt": "2025-08-16T21:38:54.480Z"
+  }
+]
