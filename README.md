@@ -6,7 +6,7 @@ npm install dotenv
 npm install express
 npm install cors express body-parser
 
-run mongodb\mongo_server.js
+node mongodb\mongo_server.js
 
 == FIREBASE STRUCTURE ==
 
