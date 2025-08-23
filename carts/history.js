@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const historyListEl = document.getElementById("history-list");
 
   // --- PDF Function (with image) ---
+  // --- PDF Function (with image & full details) ---
   function generateReceiptPDF(voucher, data, docId, imgBase64) {
     const { jsPDF } = window.jspdf;
     const docPDF = new jsPDF();
@@ -22,29 +23,66 @@ document.addEventListener("DOMContentLoaded", async () => {
       docPDF.addImage(imgBase64, "PNG", 20, y, 50, 50);
     }
 
-    // Details
-    y += 60;
+    // Move Y after image
+    y += imgBase64 ? 60 : 20;
+
+    // Voucher Details
     docPDF.setFontSize(14);
-    docPDF.text(voucher.title, 20, y);
+    docPDF.text(voucher.title || "Voucher", 20, y);
     y += 10;
 
     if (voucher.description) {
       docPDF.setFontSize(12);
-      docPDF.text(voucher.description, 20, y);
-      y += 10;
+      docPDF.text(voucher.description, 20, y, { maxWidth: 170 });
+      y += 15;
     }
 
+    docPDF.setFontSize(11);
     docPDF.text(`Completed Date: ${data.completedDate}`, 20, y);
     y += 8;
     docPDF.text(`Quantity: ${data.quantity}`, 20, y);
     y += 8;
     docPDF.text(`Total Points: ${data.totalPoints}`, 20, y);
+    y += 8;
+
+    // Extra voucher fields
+    if (voucher.points) {
+      docPDF.text(`Points per voucher: ${voucher.points}`, 20, y);
+      y += 8;
+    }
+    if (voucher.category_id) {
+      docPDF.text(
+        `Category: ${voucher.category_id.path || voucher.category_id}`,
+        20,
+        y
+      );
+      y += 8;
+    }
+    if (voucher.is_latest) {
+      docPDF.text(`Latest: ${voucher.is_latest}`, 20, y);
+      y += 8;
+    }
+
+    // Terms & Conditions
+    if (voucher.terms_and_condition) {
+      y += 10;
+      docPDF.setFontSize(12);
+      docPDF.text("Terms & Conditions:", 20, y);
+      y += 8;
+      docPDF.setFontSize(10);
+
+      // Multi-line terms wrapping
+      const terms = docPDF.splitTextToSize(voucher.terms_and_condition, 170);
+      docPDF.text(terms, 20, y);
+      y += terms.length * 6;
+    }
 
     // Footer
     y += 20;
     docPDF.setFontSize(10);
     docPDF.text("✅ Thank you for redeeming!", 20, y);
 
+    // Save PDF
     docPDF.save(`${voucher.title}-receipt.pdf`);
   }
 

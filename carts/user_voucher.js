@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const historyListEl = document.getElementById("voucher_list");
 
   // --- PDF Function ---
+  // --- PDF Function (Voucher for Redemption) ---
   function generateVoucherPDF(voucher, data, docId, imgBase64) {
     const { jsPDF } = window.jspdf;
     const docPDF = new jsPDF();
@@ -18,33 +19,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     let y = 40;
 
     // Voucher image
-    if (imgBase64.startsWith("data:image")) {
+    if (imgBase64 && imgBase64.startsWith("data:image")) {
       docPDF.addImage(imgBase64, "PNG", 20, y, 50, 50);
     }
 
-    // Details
-    y += 60;
+    y += imgBase64 ? 60 : 20;
+
+    // Voucher Title
     docPDF.setFontSize(14);
-    docPDF.text(voucher.title, 20, y);
+    docPDF.text(voucher.title || "Voucher", 20, y);
     y += 10;
 
+    // Description
     if (voucher.description) {
       docPDF.setFontSize(12);
-      docPDF.text(voucher.description, 20, y);
-      y += 10;
+      const descLines = docPDF.splitTextToSize(voucher.description, 170);
+      docPDF.text(descLines, 20, y);
+      y += descLines.length * 6;
     }
 
-    docPDF.text(`Added Date: ${data.addedDate}`, 20, y);
+    // Dates & Status
+    docPDF.setFontSize(11);
+    docPDF.text(`Added Date: ${data.addedDate || "N/A"}`, 20, y);
     y += 8;
-    docPDF.text(`Redeem Date: ${data.redeemDate}`, 20, y);
+    docPDF.text(`Redeem Date: ${data.redeemDate || "Not redeemed"}`, 20, y);
     y += 8;
-    docPDF.text(`Status: ${data.statusText}`, 20, y);
+    docPDF.text(`Status: ${data.statusText || "Active"}`, 20, y);
+    y += 10;
+
+    // Extra voucher fields
+    if (voucher.points) {
+      docPDF.text(`Points Required: ${voucher.points}`, 20, y);
+      y += 8;
+    }
+    if (voucher.category_id) {
+      docPDF.text(
+        `Category: ${voucher.category_id.path || voucher.category_id}`,
+        20,
+        y
+      );
+      y += 8;
+    }
+
+    // Terms & Conditions
+    if (voucher.terms_and_condition) {
+      y += 10;
+      docPDF.setFontSize(12);
+      docPDF.text("Terms & Conditions:", 20, y);
+      y += 8;
+      docPDF.setFontSize(10);
+
+      const terms = docPDF.splitTextToSize(voucher.terms_and_condition, 170);
+      docPDF.text(terms, 20, y);
+      y += terms.length * 6;
+    }
 
     // Footer
     y += 20;
     docPDF.setFontSize(10);
-    docPDF.text("Thank you for using our voucher system!", 20, y);
+    docPDF.text("✅ Thank you for using our voucher system!", 20, y);
 
+    // Save
     docPDF.save(`${voucher.title}-voucher.pdf`);
   }
 

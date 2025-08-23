@@ -273,14 +273,23 @@
           modal.className = "redeem-modal hidden";
           modal.innerHTML = `
     <div class="redeem-modal-content">
+      <img id="redeem-image" src="" alt="Voucher Image" style="width:100%;max-height:200px;object-fit:cover;margin-bottom:10px;" />
       <h3 id="redeem-title"></h3>
       <p id="redeem-description"></p>
-      <p><strong><span id="redeem-points"></span> points</strong></p>
+      <p><strong><span id="redeem-points"></span> points</strong> each</p>
+      <p><strong>Total: <span id="redeem-total">0</span> points</strong></p>
 
       <div class="qty-controls">
         <button id="qty-decrease">-</button>
         <span id="qty-value">1</span>
         <button id="qty-increase">+</button>
+      </div>
+
+      <div style="margin-top:15px;">
+        <input type="checkbox" id="terms-check" />
+        <label for="terms-check">
+          I agree to the <a href="#" id="terms-link">Terms & Conditions</a>
+        </label>
       </div>
 
       <button id="confirm-redeem">Redeem</button>
@@ -297,33 +306,64 @@
 
           modal.classList.remove("hidden");
 
+          const imageEl = document.getElementById("redeem-image");
           const titleEl = document.getElementById("redeem-title");
           const descEl = document.getElementById("redeem-description");
           const pointsEl = document.getElementById("redeem-points");
+          const totalEl = document.getElementById("redeem-total");
           const qtyValueEl = document.getElementById("qty-value");
           const qtyDecreaseBtn = document.getElementById("qty-decrease");
           const qtyIncreaseBtn = document.getElementById("qty-increase");
           const confirmBtn = document.getElementById("confirm-redeem");
           const closeBtn = document.getElementById("close-redeem");
+          const termsCheck = document.getElementById("terms-check");
+          const termsLink = document.getElementById("terms-link");
 
           let qty = 1;
+          const pointsEach = parseInt(voucher.points) || 0;
 
-          // Fill in voucher details
+          // ✅ Fill in voucher details
           titleEl.textContent = voucher.title || "Voucher";
           descEl.textContent = voucher.description || "";
-          pointsEl.textContent = voucher.points || 0;
+          pointsEl.textContent = pointsEach;
           qtyValueEl.textContent = qty;
+          totalEl.textContent = pointsEach * qty;
+
+          // ✅ Show image
+          if (voucher.image) {
+            try {
+              const imageUrl = await getVoucherImage(voucher.image); // your storage helper
+              imageEl.src = imageUrl;
+            } catch {
+              imageEl.src = "../assets/giftcard.jpg";
+            }
+          } else {
+            imageEl.src = "../assets/giftcard.jpg";
+          }
+
+          // ✅ Show terms & condition
+          if (voucher.terms_and_condition) {
+            termsLink.onclick = (e) => {
+              e.preventDefault();
+              alert("Terms & Conditions:\n\n" + voucher.terms_and_condition);
+            };
+          }
+
+          function updateTotal() {
+            qtyValueEl.textContent = qty;
+            totalEl.textContent = pointsEach * qty;
+          }
 
           qtyDecreaseBtn.onclick = () => {
             if (qty > 1) {
               qty--;
-              qtyValueEl.textContent = qty;
+              updateTotal();
             }
           };
 
           qtyIncreaseBtn.onclick = () => {
             qty++;
-            qtyValueEl.textContent = qty;
+            updateTotal();
           };
 
           closeBtn.onclick = () => {
@@ -333,16 +373,21 @@
           confirmBtn.onclick = async () => {
             try {
               if (!voucher.id) throw new Error("Voucher id is missing!");
+              if (!termsCheck.checked) {
+                alert(
+                  "You must agree to the Terms & Conditions before redeeming."
+                );
+                return;
+              }
 
               const userRef = db.collection("users").doc(userId);
               const voucherRef = db.collection("vouchers").doc(voucher.id);
+              const totalPoints = pointsEach * qty;
 
-              const totalPoints = voucher.points * qty;
-
-              // 1️⃣ Create voucher_history first
+              // 1️⃣ Create voucher_history
               const historyRef = await db.collection("voucher_history").add({
-                user_id: userRef, // reference
-                voucher_id: voucherRef, // reference
+                user_id: userRef,
+                voucher_id: voucherRef,
                 quantity: qty,
                 total_points: totalPoints,
                 completed_date: firebase.firestore.Timestamp.now(),
@@ -353,21 +398,20 @@
               for (let i = 0; i < qty; i++) {
                 const docRef = db.collection("users_voucher_list").doc();
                 batch.set(docRef, {
-                  user_id: userRef, // reference
-                  voucher_id: voucherRef, // reference
-                  history_id: historyRef, // reference to voucher_history
+                  user_id: userRef,
+                  voucher_id: voucherRef,
+                  history_id: historyRef,
                   added_date: firebase.firestore.Timestamp.now(),
                   redeem: false,
                   redeem_date: null,
                 });
               }
 
-              // 3️⃣ Decrease user points in the same batch
+              // 3️⃣ Deduct user points
               batch.update(userRef, {
                 points: firebase.firestore.FieldValue.increment(-totalPoints),
               });
 
-              // ✅ Commit batch (users_voucher_list + points deduction)
               await batch.commit();
 
               alert(`Voucher redeemed successfully! ${qty} x ${voucher.title}`);
