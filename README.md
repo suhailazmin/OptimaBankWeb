@@ -41,17 +41,25 @@ Path: /cart_items/cart_item_id_002
 "quantity": 1
 }
 
-✅ 3. cart_item_history Collection → /cart_item_history/{historyId}
-Path: /cart_item_history/history_id_001
+✅ 3. users_voucher_list/{autoId}
 {
-"user_id": "user_id_123",
-"voucher_id": "voucher_id_3",
-"quantity": 1,
-"completed_date": "2025-08-01T10:00:00Z"
+"user_id": "/users/{userId}", // Reference
+"voucher_id": "/vouchers/{voucherId}", // Reference
+"added_date": "Timestamp",
+"redeem": false,
+"redeem_date": null
 }
 
-✅ 4. vouchers Collection → /vouchers/{voucherId}
-Path: /vouchers/voucher_id_3
+✅ 4.users_voucher_list/{autoId}
+{
+"user_id": "/users/{userId}", // Reference
+"voucher_id": "/vouchers/{voucherId}", // Reference
+"quantity": 1,
+"total_points": 200,
+"completed_date": "Timestamp"
+}
+
+✅ 5. voucher_history/{autoId}
 
 {
 "category_id": "category_id_1",
@@ -63,7 +71,7 @@ Path: /vouchers/voucher_id_3
 "is_latest": true
 }
 
-✅ 5. categories Collection → /categories/{categoryId}
+✅ 6. categories Collection → /categories/{categoryId}
 Path: /categories/category_id_1
 {
 "name": "Food"

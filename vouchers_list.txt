@@ -1,0 +1,61 @@
+const vouchers = [
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "Free Coffee Upgrade",
+    description: "Enjoy a free size upgrade on any handcrafted coffee beverage at Starbucks outlets nationwide.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "40",
+    terms_and_condition: "Valid for one-time redemption only. Applicable to all handcrafted beverages. Not valid with other promotions. Expires 31 Dec 2025."
+  },
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "RM5 Off Tealive Drinks",
+    description: "Get RM5 off any drink purchase at Tealive, including milk tea, smoothies, and coffee.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "30",
+    terms_and_condition: "Minimum spend of RM10. Voucher valid until 31 Dec 2025. Not exchangeable for cash."
+  },
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "Buy 1 Free 1 Chatime",
+    description: "Indulge in Chatime’s bubble tea with a special Buy 1 Free 1 promotion on selected drinks.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "60",
+    terms_and_condition: "Applicable only for regular-sized drinks. Valid Mon–Fri, 12pm–6pm. Expires 31 Oct 2025."
+  },
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "RM10 Boost Juice Voucher",
+    description: "Get RM10 off fresh smoothies and juices at any Boost Juice outlet.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "50",
+    terms_and_condition: "Valid at all Boost Juice stores in Malaysia. No cash value. Expires 31 Dec 2025."
+  },
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "Free Bubble Topping",
+    description: "Enjoy one free topping (pearls, pudding, or jelly) with your next Gong Cha drink.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "20",
+    terms_and_condition: "Valid with minimum purchase of RM8. Not valid with delivery orders. Expires 30 Nov 2025."
+  },
+  {
+    category_id: db.doc("categories/beverage"),
+    created_date: firebase.firestore.Timestamp.fromDate(new Date("2025-08-06T14:57:08Z")),
+    title: "20% Off Coffee Bean & Tea Leaf",
+    description: "Enjoy 20% off any handcrafted beverage at The Coffee Bean & Tea Leaf.",
+    image: imageId || "",
+    is_latest: "true",
+    points: "70",
+    terms_and_condition: "Not valid with other discounts. Redeemable in-store only. Valid until 31 Dec 2025."
+  },

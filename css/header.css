@@ -71,6 +71,24 @@
 .dropdown.open .dropdown-menu {
   display: flex;
 }
+.cart-history-btn {
+  display: flex;
+  flex-direction: column; /* stack image and text vertically */
+  align-items: center;
+  text-decoration: none; /* remove underline */
+}
+
+.voucher-icon {
+  width: 32px; /* adjust as needed */
+  height: 32px;
+  margin-bottom: 4px; /* space between image and text */
+}
+
+.voucher-text {
+  color: white; /* white text */
+  font-size: 12px; /* adjust as needed */
+  text-align: center;
+}
 
 .dropdown-item {
   background: #7a1fd7;

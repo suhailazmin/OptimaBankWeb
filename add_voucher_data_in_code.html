@@ -93,16 +93,18 @@
             }
 
             const voucher = {
-              category_id: db.doc("categories/food"),
+              category_id: db.doc("categories/travel"),
               created_date: firebase.firestore.Timestamp.fromDate(
                 new Date("2025-08-06T14:57:08Z")
               ),
-              description: "Get RM10 off at Pizahut's",
+              title: "Free Luggage Allowance Upgrade",
+              description:
+                "Receive an additional 10kg luggage allowance on selected domestic flights.",
               image: imageId || "",
               is_latest: "true",
-              points: "50",
-              terms_and_condition: "Valid until 31 Dec 2025",
-              title: "RM10 Pizahut Voucher",
+              points: "150",
+              terms_and_condition:
+                "Valid for participating airlines only. Subject to seat availability. Expires 31 Dec 2025.",
             };
 
             console.log("Voucher object:", voucher);

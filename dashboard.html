@@ -21,6 +21,56 @@
           });
       }
     </script>
+    <style>
+      .category-filters {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .category-btn {
+        background: #eee;
+        border: none;
+        padding: 8px 14px;
+        margin: 5px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .category-btn.active {
+        background: #6a0dad;
+        color: white;
+      }
+
+      .redeem-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .redeem-modal.hidden {
+        display: none;
+      }
+      .redeem-modal-content {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        width: 300px;
+      }
+      .qty-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 15px 0;
+      }
+    </style>
   </head>
 
   <body>
@@ -61,30 +111,16 @@
           </a>
           <div class="dropdown-menu" id="dropdownMenu">
             <div class="dropdown-item">
-              <div class="dropdown-title">Appliances</div>
+              <div class="dropdown-title">Baverage</div>
               <div class="dropdown-desc">
-                Discounts or credits for home and kitchen gadgets.
+                All Kind of Baverage vaucher available here
               </div>
               <span class="dropdown-chevron">&#8250;</span>
             </div>
             <div class="dropdown-item">
-              <div class="dropdown-title">Decoration</div>
+              <div class="dropdown-title">Food</div>
               <div class="dropdown-desc">
-                Savings on home décor, furnishings, or festive ornaments.
-              </div>
-              <span class="dropdown-chevron">&#8250;</span>
-            </div>
-            <div class="dropdown-item">
-              <div class="dropdown-title">Cosmetic</div>
-              <div class="dropdown-desc">
-                Deals on skincare, makeup, or beauty products.
-              </div>
-              <span class="dropdown-chevron">&#8250;</span>
-            </div>
-            <div class="dropdown-item">
-              <div class="dropdown-title">Apparel</div>
-              <div class="dropdown-desc">
-                Vouchers for clothing, shoes, or fashion accessories.
+                All Kind of Food vaucher available here
               </div>
               <span class="dropdown-chevron">&#8250;</span>
             </div>
@@ -103,6 +139,21 @@
           <span class="cart-icon">&#128722;</span>
         </a>
 
+        <!-- Cart History / Voucher History button with image -->
+        <a href="carts/user_voucher.html" class="cart-history-btn">
+          <img
+            src="assets/voucher.png"
+            class="voucher-icon"
+            alt="Your Voucher"
+          />
+          <span class="voucher-text">Your Voucher</span>
+        </a>
+
+        <a href="carts/history.html" class="cart-history-btn">
+          <img src="assets/clock.png" class="voucher-icon" alt="V History" />
+          <span class="voucher-text">V History</span>
+        </a>
+
         <script>
           firebase.auth().onAuthStateChanged(async (user) => {
             if (!user) return;
@@ -114,7 +165,6 @@
               .get();
             const userData = userDoc.data();
 
-            // If user has a profile_image stored (MongoDB ID)
             if (userData?.profile_image) {
               try {
                 const res = await fetch(
@@ -128,8 +178,15 @@
                 console.error("Error fetching profile image:", err);
               }
             }
+
+            // Optional: show user's points in navbar
+            const pointsEl = document.getElementById("points-header");
+            if (pointsEl && userData?.points != null) {
+              pointsEl.textContent = `${userData.points} Points`;
+            }
           });
         </script>
+
         <a href="auth/profile.html">
           <img
             id="profile-pic"
@@ -140,7 +197,6 @@
         </a>
 
         <span id="user-shortname">loading...</span>
-
         <span id="points-header" class="points"> counting... Points</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
@@ -163,6 +219,7 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
         const voucherListEl = document.getElementById("voucher-list");
+        const categoryFiltersEl = document.querySelector(".category-filters");
 
         async function getVoucherImage(mongoId) {
           try {
@@ -210,8 +267,128 @@
             alert("Failed to add to cart. Please try again.");
           }
         }
+        function createRedeemModal() {
+          const modal = document.createElement("div");
+          modal.id = "redeem-modal";
+          modal.className = "redeem-modal hidden";
+          modal.innerHTML = `
+    <div class="redeem-modal-content">
+      <h3 id="redeem-title"></h3>
+      <p id="redeem-description"></p>
+      <p><strong><span id="redeem-points"></span> points</strong></p>
 
-        async function loadVouchers(userId) {
+      <div class="qty-controls">
+        <button id="qty-decrease">-</button>
+        <span id="qty-value">1</span>
+        <button id="qty-increase">+</button>
+      </div>
+
+      <button id="confirm-redeem">Redeem</button>
+      <button id="close-redeem">Cancel</button>
+    </div>
+  `;
+          document.body.appendChild(modal);
+          return modal;
+        }
+
+        async function openRedeemModal(userId, voucher, cartId = null) {
+          let modal = document.getElementById("redeem-modal");
+          if (!modal) modal = createRedeemModal();
+
+          modal.classList.remove("hidden");
+
+          const titleEl = document.getElementById("redeem-title");
+          const descEl = document.getElementById("redeem-description");
+          const pointsEl = document.getElementById("redeem-points");
+          const qtyValueEl = document.getElementById("qty-value");
+          const qtyDecreaseBtn = document.getElementById("qty-decrease");
+          const qtyIncreaseBtn = document.getElementById("qty-increase");
+          const confirmBtn = document.getElementById("confirm-redeem");
+          const closeBtn = document.getElementById("close-redeem");
+
+          let qty = 1;
+
+          // Fill in voucher details
+          titleEl.textContent = voucher.title || "Voucher";
+          descEl.textContent = voucher.description || "";
+          pointsEl.textContent = voucher.points || 0;
+          qtyValueEl.textContent = qty;
+
+          qtyDecreaseBtn.onclick = () => {
+            if (qty > 1) {
+              qty--;
+              qtyValueEl.textContent = qty;
+            }
+          };
+
+          qtyIncreaseBtn.onclick = () => {
+            qty++;
+            qtyValueEl.textContent = qty;
+          };
+
+          closeBtn.onclick = () => {
+            modal.classList.add("hidden");
+          };
+
+          confirmBtn.onclick = async () => {
+            try {
+              if (!voucher.id) throw new Error("Voucher id is missing!");
+
+              // 🔹 Firestore references
+              const userRef = db.collection("users").doc(userId);
+              const voucherRef = db.collection("vouchers").doc(voucher.id);
+
+              const batch = db.batch();
+
+              // 1️⃣ Add each voucher to users_voucher_list
+              for (let i = 0; i < qty; i++) {
+                const docRef = db.collection("users_voucher_list").doc(); // auto ID
+                batch.set(docRef, {
+                  user_id: userRef, // reference
+                  voucher_id: voucherRef, // reference
+                  added_date: firebase.firestore.Timestamp.now(),
+                  redeem: false,
+                  redeem_date: null,
+                });
+              }
+
+              // 2️⃣ Decrease user points
+              const totalPoints = voucher.points * qty;
+              batch.update(userRef, {
+                points: firebase.firestore.FieldValue.increment(-totalPoints),
+              });
+
+              // ✅ Commit batch (voucher list + user points deduction together)
+              await batch.commit();
+
+              // 3️⃣ Add a receipt to voucher_history (separate, no need to batch)
+              await db.collection("voucher_history").add({
+                user_id: userRef, // reference
+                voucher_id: voucherRef, // reference
+                quantity: qty,
+                total_points: totalPoints,
+                completed_date: firebase.firestore.Timestamp.now(),
+              });
+
+              alert(`Voucher redeemed successfully! ${qty} x ${voucher.title}`);
+              modal.classList.add("hidden");
+
+              // 4️⃣ Remove from cart if applicable
+              if (cartId) {
+                const cartItemEl = document.getElementById(
+                  `cartItem-${cartId}`
+                );
+                if (cartItemEl) cartItemEl.remove();
+                await db.collection("cart_items").doc(cartId).delete();
+              }
+            } catch (err) {
+              console.error("Redeem failed:", err);
+              alert("Failed to redeem voucher: " + err.message);
+            }
+          };
+        }
+
+        async function loadVouchers(userId, selectedCategoryId = "All") {
           const snapshot = await db.collection("vouchers").get();
           const vouchers = snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -220,13 +397,25 @@
 
           voucherListEl.innerHTML = "";
 
-          if (!vouchers.length) {
-            voucherListEl.innerHTML = "<p>No vouchers available right now.</p>";
+          // Filter vouchers
+          const filteredVouchers =
+            selectedCategoryId === "All"
+              ? vouchers
+              : vouchers.filter((v) => {
+                  // if category_id is a Firestore document reference
+                  if (v.category_id && v.category_id.id) {
+                    return v.category_id.id === selectedCategoryId;
+                  }
+                  // if category_id is stored as string
+                  return v.category_id === selectedCategoryId;
+                });
+
+          if (!filteredVouchers.length) {
+            voucherListEl.innerHTML = `<p>No vouchers available.</p>`;
             return;
           }
 
-          for (const voucher of vouchers) {
-            // Fetch image from MongoDB
+          for (const voucher of filteredVouchers) {
             let imageSrc = "../assets/giftcard.jpg";
             if (voucher.image) {
               imageSrc = await getVoucherImage(voucher.image);
@@ -235,21 +424,74 @@
             const card = document.createElement("div");
             card.className = "promo-card";
             card.innerHTML = `
-        <img src="${imageSrc}" alt="Promo" class="promo-img" />
-        <div class="promo-desc">
-          <strong>${voucher.title || "Voucher"}</strong><br />
-          <span class="promo-points">${voucher.points || 0} points</span>
-          <div class="promo-body">${voucher.description || ""}</div>
-          <button class="add-to-cart-btn">Add to Cart</button>
-        </div>
-      `;
+  <img src="${imageSrc}" alt="Promo" class="promo-img" />
+  <div class="promo-desc">
+    <strong>${voucher.title || "Voucher"}</strong><br />
+    <span class="promo-points">${voucher.points || 0} points</span>
+    <div class="promo-body">${voucher.description || ""}</div>
+    <button class="add-to-cart-btn">Add to Cart</button>
+    <button class="redeem-btn">Redeem</button>
+  </div>
+`;
 
-            const button = card.querySelector(".add-to-cart-btn");
-            button.addEventListener("click", () =>
-              addToCart(userId, voucher.id)
-            );
+            card
+              .querySelector(".add-to-cart-btn")
+              .addEventListener("click", () => addToCart(userId, voucher.id));
+
+            card
+              .querySelector(".redeem-btn")
+              .addEventListener("click", () =>
+                openRedeemModal(userId, voucher)
+              );
 
             voucherListEl.appendChild(card);
+          }
+        }
+
+        async function loadCategories(userId) {
+          try {
+            const snapshot = await db.collection("categories").get();
+            const categories = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+
+            // Build category filter buttons
+            categoryFiltersEl.innerHTML = "";
+
+            const allBtn = document.createElement("button");
+            allBtn.textContent = "All Latest";
+            allBtn.className = "category-btn active";
+            allBtn.dataset.category = "All";
+            categoryFiltersEl.appendChild(allBtn);
+
+            for (const cat of categories) {
+              const btn = document.createElement("button");
+              btn.textContent = cat.name;
+              btn.className = "category-btn";
+              btn.dataset.category = cat.id;
+              categoryFiltersEl.appendChild(btn);
+            }
+
+            // Event listeners for category switching
+            categoryFiltersEl
+              .querySelectorAll(".category-btn")
+              .forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                  categoryFiltersEl
+                    .querySelectorAll(".category-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                  btn.classList.add("active");
+
+                  // Reload vouchers when category changes
+                  await loadVouchers(userId, btn.dataset.category);
+                });
+              });
+
+            // Load all vouchers by default
+            await loadVouchers(userId, "All");
+          } catch (error) {
+            console.error("Error loading categories:", error);
           }
         }
 
@@ -258,21 +500,25 @@
           if (!user) {
             auth.onAuthStateChanged(async (user) => {
               if (user) {
-                await loadVouchers(user.uid);
+                await loadCategories(user.uid);
               } else {
                 voucherListEl.innerHTML =
                   "<p>Please log in to view and add vouchers to cart.</p>";
               }
             });
           } else {
-            await loadVouchers(user.uid);
+            await loadCategories(user.uid);
           }
         } catch (error) {
-          console.error("Error loading vouchers:", error);
-          voucherListEl.innerHTML = "<p>Error loading vouchers.</p>";
+          console.error("Error initializing dashboard:", error);
+          voucherListEl.innerHTML = "<p>Error loading dashboard.</p>";
         }
       });
     </script>
+
+    <div class="category-filters">
+      <p>Loading categories...</p>
+    </div>
 
     <!-- Promotions Section -->
     <div class="promotions-section">
@@ -281,60 +527,6 @@
         <p>Loading vouchers...</p>
       </div>
     </div>
-
-    <!-- <div class="promotions-section">
-      <h2 class="promotions-title">Promotions & New deals</h2>
-      <div class="promotions-grid">
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-        <div class="promo-card">
-          <img src="../assets/giftcard.jpg" alt="Promo" class="promo-img" />
-          <div class="promo-desc">
-            <strong>10%</strong><br />
-            <span class="promo-points">100 points</span>
-            <div class="promo-body">Body text.</div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <!-- Footer Section -->
     <footer class="footer">
