@@ -45,12 +45,13 @@ Path: /cart_items/cart_item_id_002
 {
 "user_id": "/users/{userId}", // Reference
 "voucher_id": "/vouchers/{voucherId}", // Reference
+"history_id": "/voucher_history/{historyId}", // Reference
 "added_date": "Timestamp",
 "redeem": false,
 "redeem_date": null
 }
 
-✅ 4.users_voucher_list/{autoId}
+✅ 4.voucher_history/{autoId}
 {
 "user_id": "/users/{userId}", // Reference
 "voucher_id": "/vouchers/{voucherId}", // Reference
@@ -59,7 +60,7 @@ Path: /cart_items/cart_item_id_002
 "completed_date": "Timestamp"
 }
 
-✅ 5. voucher_history/{autoId}
+✅ 5. vouchers/{autoId}
 
 {
 "category_id": "category_id_1",
