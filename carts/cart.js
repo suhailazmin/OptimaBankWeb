@@ -207,34 +207,10 @@ function showCheckoutModal(
         .collection("vouchers")
         .doc(voucherId);
 
-      const batch = firebase.firestore().batch();
-
-      // 1. Add to users_voucher_list with references
-      for (let i = 0; i < qty; i++) {
-        const docRef = firebase
-          .firestore()
-          .collection("users_voucher_list")
-          .doc();
-        batch.set(docRef, {
-          user_id: userRef, // DocumentReference
-          voucher_id: voucherRef, // DocumentReference
-          added_date: firebase.firestore.Timestamp.now(),
-          redeem: false,
-          redeem_date: null,
-        });
-      }
-
-      // 2. Decrease user points
       const totalPoints = pointsPerVoucher * qty;
-      batch.update(userRef, {
-        points: firebase.firestore.FieldValue.increment(-totalPoints),
-      });
 
-      // ✅ Commit batch (voucher list + points deduction together)
-      await batch.commit();
-
-      // 3. Add voucher_history with references (outside batch is fine)
-      await firebase
+      // 1️⃣ Create voucher_history first
+      const historyRef = await firebase
         .firestore()
         .collection("voucher_history")
         .add({
@@ -250,12 +226,42 @@ function showCheckoutModal(
           },
         });
 
-      // 4. Remove from cart
-      await firebase.firestore().collection("cart_items").doc(cartId).delete();
+      // 2️⃣ Add to users_voucher_list and decrease points in a batch
+      const batch = firebase.firestore().batch();
 
-      // Remove DOM
-      const cartItemEl = document.getElementById(`cartItem-${cartId}`);
-      if (cartItemEl) cartItemEl.remove();
+      for (let i = 0; i < qty; i++) {
+        const docRef = firebase
+          .firestore()
+          .collection("users_voucher_list")
+          .doc();
+        batch.set(docRef, {
+          user_id: userRef,
+          voucher_id: voucherRef,
+          history_id: historyRef, // Reference to voucher_history
+          added_date: firebase.firestore.Timestamp.now(),
+          redeem: false,
+          redeem_date: null,
+        });
+      }
+
+      // Decrease user points
+      batch.update(userRef, {
+        points: firebase.firestore.FieldValue.increment(-totalPoints),
+      });
+
+      // Commit batch
+      await batch.commit();
+
+      // 3️⃣ Remove from cart
+      if (cartId) {
+        await firebase
+          .firestore()
+          .collection("cart_items")
+          .doc(cartId)
+          .delete();
+        const cartItemEl = document.getElementById(`cartItem-${cartId}`);
+        if (cartItemEl) cartItemEl.remove();
+      }
 
       alert(`Purchased ${qty} x ${voucher.title} successfully!`);
       overlay.remove();

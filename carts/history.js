@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Header
     docPDF.setFontSize(20);
-    docPDF.text("🎁 Voucher Redeem Receipt", 20, 20);
+    docPDF.text("Voucher Receipt", 20, 20);
 
     docPDF.setFontSize(10);
-    docPDF.text(`Record ID: ${docId}`, 20, 28);
+    docPDF.text(`Receipt ID: ${docId}`, 20, 28);
 
     let y = 40;
 

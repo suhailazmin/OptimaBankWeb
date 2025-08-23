@@ -334,41 +334,41 @@
             try {
               if (!voucher.id) throw new Error("Voucher id is missing!");
 
-              // 🔹 Firestore references
               const userRef = db.collection("users").doc(userId);
               const voucherRef = db.collection("vouchers").doc(voucher.id);
 
-              const batch = db.batch();
-
-              // 1️⃣ Add each voucher to users_voucher_list
-              for (let i = 0; i < qty; i++) {
-                const docRef = db.collection("users_voucher_list").doc(); // auto ID
-                batch.set(docRef, {
-                  user_id: userRef, // reference
-                  voucher_id: voucherRef, // reference
-                  added_date: firebase.firestore.Timestamp.now(),
-                  redeem: false,
-                  redeem_date: null,
-                });
-              }
-
-              // 2️⃣ Decrease user points
               const totalPoints = voucher.points * qty;
-              batch.update(userRef, {
-                points: firebase.firestore.FieldValue.increment(-totalPoints),
-              });
 
-              // ✅ Commit batch (voucher list + user points deduction together)
-              await batch.commit();
-
-              // 3️⃣ Add a receipt to voucher_history (separate, no need to batch)
-              await db.collection("voucher_history").add({
+              // 1️⃣ Create voucher_history first
+              const historyRef = await db.collection("voucher_history").add({
                 user_id: userRef, // reference
                 voucher_id: voucherRef, // reference
                 quantity: qty,
                 total_points: totalPoints,
                 completed_date: firebase.firestore.Timestamp.now(),
               });
+
+              // 2️⃣ Add each voucher to users_voucher_list in a batch
+              const batch = db.batch();
+              for (let i = 0; i < qty; i++) {
+                const docRef = db.collection("users_voucher_list").doc();
+                batch.set(docRef, {
+                  user_id: userRef, // reference
+                  voucher_id: voucherRef, // reference
+                  history_id: historyRef, // reference to voucher_history
+                  added_date: firebase.firestore.Timestamp.now(),
+                  redeem: false,
+                  redeem_date: null,
+                });
+              }
+
+              // 3️⃣ Decrease user points in the same batch
+              batch.update(userRef, {
+                points: firebase.firestore.FieldValue.increment(-totalPoints),
+              });
+
+              // ✅ Commit batch (users_voucher_list + points deduction)
+              await batch.commit();
 
               alert(`Voucher redeemed successfully! ${qty} x ${voucher.title}`);
               modal.classList.add("hidden");
